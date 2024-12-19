@@ -1,0 +1,59 @@
+<?php
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$dbname = 'curriculos_db';
+
+// Criar conexão
+$conn = new mysqli($host, $user, $pass, $dbname);
+
+// Verificar conexão
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $sql = "SELECT * FROM curriculos WHERE id=$id";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $curriculo = $result->fetch_assoc();
+    } else {
+        echo "Currículo não encontrado.";
+    }
+} else {
+    echo "ID do currículo inválido.";
+}
+$conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Currículo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5>Visualizar Currículo</h5>
+        </div>
+        <div class="card-body">
+            <?php if ($curriculo): ?>
+                <p><strong>Nome:</strong> <?php echo $curriculo['nome']; ?></p>
+                <p><strong>Email:</strong> <?php echo $curriculo['email']; ?></p>
+                <p><strong>Funções:</strong> <?php echo $curriculo['funcao']; ?></p>
+                <!-- Adicione mais campos conforme necessário -->
+            <?php else: ?>
+                <p>Currículo não encontrado.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+</body>
+</html>
